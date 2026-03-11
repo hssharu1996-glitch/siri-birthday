@@ -1,0 +1,958 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Siri's Magical 2nd Birthday Invitation</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Quicksand:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Confetti JS -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <style>
+        :root {
+            --primary-pink: #ffe6f0;
+            --soft-pink: #ffb6c1;
+            --rose-pink: #ff69b4;
+            --lavender: #e6e6fa;
+            --gold: #dfb15b;
+            --gold-light: #f9d976;
+            --text-dark: #5c4054;
+            --text-light: #8a6c81;
+            --white-glass: rgba(255, 255, 255, 0.6);
+            --border-glass: rgba(255, 255, 255, 0.8);
+            
+            --vh: 100vh;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background: linear-gradient(135deg, var(--primary-pink) 0%, var(--lavender) 100%);
+            color: var(--text-dark);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+            scroll-behavior: smooth;
+        }
+
+        /* Particles Container */
+        #particles-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Glassmorphism utility */
+        .glass-card {
+            background: var(--white-glass);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--border-glass);
+            border-radius: 24px;
+            box-shadow: 0 8px 32px rgba(255, 105, 180, 0.15);
+            padding: 2rem;
+            margin-bottom: 2rem;
+            position: relative;
+            z-index: 1;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .glass-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px rgba(255, 105, 180, 0.25);
+        }
+
+        h1, h2, h3, .magical-title {
+            font-family: 'Great Vibes', cursive;
+            color: var(--rose-pink);
+            font-weight: 400;
+        }
+
+        .magical-title {
+            font-size: 4rem;
+            text-align: center;
+            text-shadow: 2px 2px 4px rgba(255, 182, 193, 0.5);
+            margin-bottom: 1rem;
+            line-height: 1.2;
+        }
+
+        .subtitle {
+            text-align: center;
+            font-size: 1.2rem;
+            color: var(--text-light);
+            margin-bottom: 2rem;
+        }
+
+        /* Controls */
+        .controls {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            display: flex;
+            gap: 10px;
+        }
+
+        .icon-btn {
+            background: rgba(255, 255, 255, 0.8);
+            border: none;
+            border-radius: 50%;
+            width: 45px;
+            height: 45px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            color: var(--rose-pink);
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
+        }
+
+        .icon-btn:hover {
+            transform: scale(1.1);
+            background: var(--rose-pink);
+            color: white;
+        }
+
+        /* Storybook Opening Overlay */
+        #storybook-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--primary-pink), var(--lavender));
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            transition: opacity 1.5s ease-in-out, visibility 1.5s;
+        }
+
+        .book {
+            width: 280px;
+            height: 380px;
+            perspective: 1500px;
+            position: relative;
+            cursor: pointer;
+            animation: float 4s ease-in-out infinite;
+        }
+
+        .book-cover {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--rose-pink), #e83e8c);
+            border-radius: 5px 15px 15px 5px;
+            box-shadow: 
+                inset 4px 0 10px rgba(0,0,0,0.1),
+                inset -1px 0 2px rgba(255,255,255,0.3),
+                10px 10px 30px rgba(0,0,0,0.3);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            transform-origin: left;
+            transition: transform 1.5s cubic-bezier(0.645, 0.045, 0.355, 1);
+            z-index: 2;
+        }
+
+        .book.open .book-cover {
+            transform: rotateY(-120deg);
+        }
+
+        .book-spine {
+            position: absolute;
+            left: -15px;
+            width: 30px;
+            height: 100%;
+            background: #d63384;
+            border-radius: 10px 0 0 10px;
+            transform: rotateY(-90deg);
+            transform-origin: right;
+            border-right: 2px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .book-pages {
+            position: absolute;
+            width: 95%;
+            height: 96%;
+            top: 2%;
+            left: 2%;
+            background: #fffdf5;
+            border-radius: 3px 10px 10px 3px;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.1);
+            z-index: 1;
+            /* Page lines */
+            background-image: repeating-linear-gradient(to bottom, transparent, transparent 19px, #eee 20px);
+        }
+
+        .book-title {
+            color: white;
+            font-family: 'Great Vibes', cursive;
+            font-size: 3rem;
+            text-align: center;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+            border: 2px solid var(--gold);
+            padding: 1rem;
+            border-radius: 10px;
+            background: rgba(255,255,255,0.1);
+        }
+
+        .tap-text {
+            color: white;
+            margin-top: 2rem;
+            font-size: 1.1rem;
+            animation: pulse 2s infinite;
+            font-weight: 500;
+            background: rgba(0,0,0,0.2);
+            padding: 5px 15px;
+            border-radius: 20px;
+        }
+
+        /* Layout */
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 1.5s ease, transform 1.5s ease;
+        }
+
+        .container.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .photo-frame {
+            width: 200px;
+            height: 200px;
+            margin: 0 auto 2rem;
+            border-radius: 50%;
+            padding: 8px;
+            background: linear-gradient(45deg, var(--gold), var(--rose-pink));
+            box-shadow: 0 10px 25px rgba(255, 105, 180, 0.3);
+            position: relative;
+        }
+
+        .photo-frame img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid white;
+        }
+        
+        .photo-decor {
+            position: absolute;
+            font-size: 1.5rem;
+            animation: float 3s ease-in-out infinite alternate;
+        }
+        .decor-1 { top: 10px; left: -10px; animation-delay: 0s; }
+        .decor-2 { bottom: 20px; right: -15px; animation-delay: 1s; font-size: 2rem;}
+
+        /* Countdown */
+        .countdown-container {
+            text-align: center;
+        }
+
+        .countdown-title {
+            font-family: 'Great Vibes', cursive;
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            color: var(--rose-pink);
+        }
+
+        .timer {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .time-box {
+            background: rgba(255, 255, 255, 0.8);
+            min-width: 80px;
+            padding: 15px 10px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            border: 1px solid var(--soft-pink);
+        }
+
+        .time-box span {
+            display: block;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--rose-pink);
+        }
+
+        .time-box label {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-light);
+            font-weight: 600;
+        }
+
+        /* Details Sections */
+        .details-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 2rem;
+        }
+
+        .detail-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            margin-bottom: 1.5rem;
+        }
+
+        .detail-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--primary-pink);
+            color: var(--rose-pink);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+            box-shadow: 0 4px 10px rgba(255, 105, 180, 0.2);
+        }
+
+        .detail-text h4 {
+            color: var(--text-dark);
+            margin-bottom: 5px;
+            font-size: 1.1rem;
+        }
+
+        .detail-text p {
+            color: var(--text-light);
+            line-height: 1.5;
+            font-size: 0.95rem;
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 12px 24px;
+            border-radius: 30px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: none;
+            font-family: 'Quicksand', sans-serif;
+            font-size: 1rem;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            transition: left 0.5s ease;
+            z-index: -1;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--rose-pink), #ff1493);
+            color: white;
+            box-shadow: 0 6px 20px rgba(255, 105, 180, 0.4);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(255, 105, 180, 0.5);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: white;
+            color: var(--rose-pink);
+            border: 2px solid var(--soft-pink);
+        }
+
+        .btn-secondary:hover {
+            background: var(--primary-pink);
+            transform: translateY(-2px);
+        }
+
+        .btn-whatsapp {
+            background: linear-gradient(135deg, #25D366, #1bd741);
+            color: white;
+            box-shadow: 0 6px 20px rgba(37, 211, 102, 0.3);
+        }
+        
+        .btn-whatsapp:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(37, 211, 102, 0.4);
+            color: white;
+        }
+
+        .btn-instagram {
+            background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+            color: white;
+            box-shadow: 0 6px 20px rgba(220, 39, 67, 0.3);
+        }
+
+        .btn-instagram:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(220, 39, 67, 0.4);
+            color: white;
+        }
+
+        .actions {
+            margin-top: 2rem;
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        /* Map */
+        .map-container {
+            width: 100%;
+            height: 300px;
+            border-radius: 15px;
+            overflow: hidden;
+            margin-top: 1.5rem;
+            margin-bottom: 1.5rem;
+            border: 3px solid white;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .map-container iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        /* Center utilities */
+        .text-center { text-align: center; }
+        .mt-2 { margin-top: 1rem; }
+        .mb-2 { margin-bottom: 1rem; }
+        .w-100 { width: 100%; }
+
+        /* Animations */
+        @keyframes float {
+            0% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-15px) rotate(2deg); }
+            100% { transform: translateY(0px) rotate(0deg); }
+        }
+
+        @keyframes pulse {
+            0% { opacity: 0.6; transform: scale(0.95); }
+            50% { opacity: 1; transform: scale(1.05); }
+            100% { opacity: 0.6; transform: scale(0.95); }
+        }
+
+        .flying-butterfly {
+            position: absolute;
+            font-size: 1.5rem;
+            pointer-events: none;
+            z-index: 5;
+            animation: fly-across linear forwards;
+            filter: drop-shadow(0 4px 6px rgba(255, 105, 180, 0.4));
+        }
+
+        @keyframes fly-across {
+            0% {
+                transform: translate(0, 0) scale(0.5) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translate(calc(100vw + 100px), -100vh) scale(1.5) rotate(45deg);
+                opacity: 0;
+            }
+        }
+
+        .sparkle {
+            position: absolute;
+            width: 5px;
+            height: 5px;
+            background: white;
+            border-radius: 50%;
+            box-shadow: 0 0 10px 2px var(--gold);
+            pointer-events: none;
+            z-index: 4;
+            animation: twinkle 2s linear forwards;
+        }
+
+        @keyframes twinkle {
+            0% { opacity: 0; transform: scale(0); }
+            50% { opacity: 1; transform: scale(1.5); }
+            100% { opacity: 0; transform: scale(0); }
+        }
+
+        /* Decorative branches / flowers */
+        .decoration {
+            position: absolute;
+            max-width: 150px;
+            opacity: 0.6;
+            z-index: -1;
+            pointer-events: none;
+        }
+        .dec-top-left { top: -20px; left: -20px; transform: rotate(-45deg); font-size: 5rem; }
+        .dec-bottom-right { bottom: -20px; right: -20px; transform: rotate(135deg); font-size: 5rem;}
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .magical-title { font-size: 2.5rem; }
+            .countdown-title { font-size: 2rem; }
+            .container { padding: 40px 15px 40px; }
+            .timer { gap: 10px; }
+            .time-box { min-width: 60px; padding: 10px 5px; }
+            .time-box span { font-size: 1.5rem; }
+            .time-box label { font-size: 0.7rem; }
+            .actions { flex-direction: column; gap: 10px; }
+            .btn { width: 100%; justify-content: center; font-size: 0.9rem; padding: 10px 15px; }
+            .photo-frame { width: 150px; height: 150px; margin-bottom: 1.5rem; }
+            .book { width: 240px; height: 340px; }
+            .book-title { font-size: 2.2rem; padding: 0.5rem; }
+            .details-grid { grid-template-columns: 1fr; }
+            .detail-item { gap: 10px; }
+            .glass-card { padding: 1.5rem; }
+            .subtitle { font-size: 1rem; margin-bottom: 1.5rem; }
+        }
+        
+        @media (max-width: 400px) {
+            .magical-title { font-size: 2.2rem; }
+            .countdown-title { font-size: 1.8rem; }
+            .book { width: 200px; height: 280px; }
+            .book-title { font-size: 1.8rem; }
+            .tap-text { font-size: 0.9rem; }
+            .glass-card { padding: 1rem; margin-bottom: 1rem; }
+            .detail-icon { width: 35px; height: 35px; font-size: 1rem; }
+            .timer { gap: 5px; }
+            .time-box { min-width: 50px; padding: 8px 4px; }
+            .time-box span { font-size: 1.2rem; }
+            .time-box label { font-size: 0.6rem; }
+            .detail-text h4 { font-size: 1rem; }
+            .detail-text p { font-size: 0.85rem; }
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- Controls -->
+    <div class="controls">
+        <button id="musicToggle" class="icon-btn" aria-label="Toggle Music" style="display: none;">
+            <i class="fas fa-music"></i>
+        </button>
+    </div>
+
+    <!-- Audio Element -->
+    <audio id="bgMusic" loop preload="auto">
+        <!-- Magic cinematic audio link as background music -->
+        <source src="https://cdn.pixabay.com/download/audio/2022/01/21/audio_3174242621.mp3?filename=magic-in-the-air-43177.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- Background Particles -->
+    <div id="particles-container"></div>
+
+    <!-- Storybook Overlay -->
+    <div id="storybook-overlay">
+        <div class="book" id="magicBook">
+            <div class="book-pages"></div>
+            <div class="book-spine"></div>
+            <div class="book-cover">
+                <div class="book-title">Siri's<br>Magical<br>Birthday</div>
+                <div class="tap-text"><i class="fas fa-hand-pointer mb-2"></i><br>Tap to Open</div>
+            </div>
+        </div>
+        
+        <!-- Butterflies flying around closed book -->
+        <div style="position:absolute; top:30%; left:30%; font-size:2rem; animation: float 3s ease-in-out infinite;">🦋</div>
+        <div style="position:absolute; bottom:30%; right:30%; font-size:1.5rem; animation: float 4s ease-in-out infinite reverse;">🦋</div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container" id="main-content" style="display: none;">
+        
+        <!-- Hero Section -->
+        <div class="glass-card hero">
+            <div class="decoration dec-top-left">🌸</div>
+            <div class="decoration dec-bottom-right">🌸</div>
+            
+            <div class="photo-frame">
+                <!-- Using a cute placeholder, could be replaced with actual photo -->
+                <img src="https://images.unsplash.com/photo-1519689680058-324335c77eba?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80" alt="Siri">
+                <div class="photo-decor decor-1">🦋</div>
+                <div class="photo-decor decor-2">✨</div>
+            </div>
+            
+            <h1 class="magical-title">Siri's 2nd Birthday</h1>
+            <p class="subtitle">Please join us for a butterfly-filled magical birthday celebration</p>
+        </div>
+
+        <!-- Countdown Section -->
+        <div class="glass-card countdown-container">
+            <h2 class="countdown-title">Counting down to the magic</h2>
+            <div class="timer" id="countdown">
+                <div class="time-box">
+                    <span id="days">00</span>
+                    <label>Days</label>
+                </div>
+                <div class="time-box">
+                    <span id="hours">00</span>
+                    <label>Hours</label>
+                </div>
+                <div class="time-box">
+                    <span id="minutes">00</span>
+                    <label>Minutes</label>
+                </div>
+                <div class="time-box">
+                    <span id="seconds">00</span>
+                    <label>Secs</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Event Details Section -->
+        <div class="glass-card">
+            <h2 class="countdown-title text-center">Celebration Details</h2>
+            
+            <div class="details-grid">
+                <div class="detail-item">
+                    <div class="detail-icon"><i class="far fa-calendar-alt"></i></div>
+                    <div class="detail-text">
+                        <h4>Date</h4>
+                        <p>Sunday, April 5th, 2026</p>
+                    </div>
+                </div>
+                
+                <div class="detail-item">
+                    <div class="detail-icon"><i class="far fa-clock"></i></div>
+                    <div class="detail-text">
+                        <h4>Time</h4>
+                        <p>12:00 PM Onwards</p>
+                    </div>
+                </div>
+                
+                <div class="detail-item">
+                    <div class="detail-icon"><i class="fas fa-map-marker-alt"></i></div>
+                    <div class="detail-text">
+                        <h4>Venue</h4>
+                        <p>Magical Spices Fine Dining Restaurant & Banquet Hall</p>
+                    </div>
+                </div>
+
+                <div class="detail-item">
+                    <div class="detail-icon"><i class="fas fa-tshirt"></i></div>
+                    <div class="detail-text">
+                        <h4>Dress Code</h4>
+                        <p>Preferably Pink 🌸</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="actions">
+                <button id="addToCalendarBtn" class="btn btn-primary">
+                    <i class="far fa-calendar-plus"></i> Add to Google Calendar
+                </button>
+            </div>
+        </div>
+
+        <!-- Location Map Section -->
+        <div class="glass-card">
+            <div class="detail-item">
+                <div class="detail-icon"><i class="fas fa-directions"></i></div>
+                <div class="detail-text">
+                    <h4>Location Map</h4>
+                    <p>Old Madras Rd, Nagavarapalya, Bennigana Halli, Bengaluru, Karnataka 560093</p>
+                </div>
+            </div>
+
+            <div class="map-container">
+                <!-- Embedded Google Map using standard embed URL construction -->
+                <iframe src="https://maps.google.com/maps?q=Magical%20Spices%20Fine%20Dining%20Restaurant%20%26%20Banquet%20Hall,%20Old%20Madras%20Rd,%20Bengaluru&t=&z=15&ie=UTF8&iwloc=&output=embed" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+            </div>
+
+            <div class="actions">
+                <a href="https://maps.app.goo.gl/8Uyico893BmR9vCQ8" target="_blank" class="btn btn-secondary w-100">
+                    <i class="fas fa-route"></i> Open in Google Maps
+                </a>
+            </div>
+        </div>
+
+        <!-- Instagram Section -->
+        <div class="glass-card text-center">
+            <h2 class="countdown-title" style="font-size: 2rem;">Follow the Celebration</h2>
+            <p class="subtitle" style="margin-bottom: 1.5rem;">See updates and photos on Instagram</p>
+            
+            <a href="https://www.instagram.com/little_champ_siri?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" target="_blank" style="display: inline-flex; align-items: center; justify-content: center; width: 70px; height: 70px; border-radius: 50%; background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%); color: white; font-size: 2.5rem; text-decoration: none; box-shadow: 0 6px 20px rgba(220, 39, 67, 0.3); transition: transform 0.3s ease, box-shadow 0.3s ease;">
+                <i class="fab fa-instagram"></i>
+            </a>
+        </div>
+
+        <!-- RSVP Section -->
+        <div class="glass-card text-center">
+            <h2 class="countdown-title" style="font-size: 2.2rem;">RSVP</h2>
+            <p class="subtitle" style="color: var(--text-dark); font-weight: 500;">"Please join us for a magical birthday celebration"</p>
+            <p class="mb-2">Kindly confirm your presence to make our joy complete! ✨</p>
+            
+            <div class="actions">
+                <a href="tel:9164843500" class="btn btn-primary">
+                    <i class="fas fa-phone-alt"></i> Call
+                </a>
+                <a href="https://wa.me/919164843500?text=Hi!%20We%20are%20excited%20to%20join%20Siri's%20Magical%20Birthday%20Celebration!" target="_blank" class="btn btn-whatsapp">
+                    <i class="fab fa-whatsapp"></i> WhatsApp RSVP
+                </a>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            
+            // Elements
+            const magicBook = document.getElementById('magicBook');
+            const overlay = document.getElementById('storybook-overlay');
+            const mainContent = document.getElementById('main-content');
+            const musicToggle = document.getElementById('musicToggle');
+            const bgMusic = document.getElementById('bgMusic');
+            const particlesContainer = document.getElementById('particles-container');
+
+            // --- 1. Storybook Opening Animation ---
+            magicBook.addEventListener('click', () => {
+                // Open the book visually
+                magicBook.classList.add('open');
+                
+                // Play music logic
+                bgMusic.volume = 0.5;
+                let playPromise = bgMusic.play();
+                if (playPromise !== undefined) {
+                    playPromise.then(_ => {
+                        musicToggle.style.display = 'flex';
+                        musicToggle.innerHTML = '<i class="fas fa-music"></i>';
+                    }).catch(error => {
+                        console.log("Audio autoplay prevented", error);
+                        musicToggle.style.display = 'flex';
+                        musicToggle.innerHTML = '<i class="fas fa-volume-mute"></i>';
+                    });
+                }
+
+                // Confetti Burst
+                fireConfetti();
+
+                // Generate extra flying butterflies
+                for(let i=0; i<8; i++) {
+                    setTimeout(createFlyingButterfly, i * 300);
+                }
+
+                // Fade out overlay and show main content
+                setTimeout(() => {
+                    overlay.style.opacity = '0';
+                    mainContent.style.display = 'block';
+                    
+                    // Trigger reflow to apply CSS transition
+                    void mainContent.offsetWidth; 
+                    
+                    mainContent.classList.add('visible');
+                    
+                    setTimeout(() => {
+                        overlay.style.display = 'none';
+                        // Start continuous magical effects
+                        startMagicalEffects();
+                    }, 1500);
+                }, 1000);
+            });
+
+            // --- 2. Music Toggle Button ---
+            musicToggle.addEventListener('click', () => {
+                if (bgMusic.paused) {
+                    bgMusic.play();
+                    musicToggle.innerHTML = '<i class="fas fa-music"></i>';
+                } else {
+                    bgMusic.pause();
+                    musicToggle.innerHTML = '<i class="fas fa-volume-mute"></i>';
+                }
+            });
+
+            // --- 3. Confetti logic ---
+            function fireConfetti() {
+                var duration = 3 * 1000;
+                var animationEnd = Date.now() + duration;
+                var defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 9999, colors: ['#ffb6c1', '#ff69b4', '#e6e6fa', '#dfb15b', '#ffffff'] };
+
+                function randomInRange(min, max) {
+                    return Math.random() * (max - min) + min;
+                }
+
+                var interval = setInterval(function() {
+                    var timeLeft = animationEnd - Date.now();
+
+                    if (timeLeft <= 0) {
+                        return clearInterval(interval);
+                    }
+
+                    var particleCount = 50 * (timeLeft / duration);
+                    confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 } }));
+                    confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 } }));
+                }, 250);
+            }
+
+            // --- 4. Continuous Magical Effects (Butterflies & Sparkles) ---
+            function startMagicalEffects() {
+                // Occasional butterfly
+                setInterval(() => {
+                    if (Math.random() > 0.5) createFlyingButterfly();
+                }, 4000);
+
+                // Constant sparkles
+                setInterval(createSparkle, 200);
+            }
+
+            const butterflyEmojis = ['🦋', '🤍', '🌸', '✨'];
+            function createFlyingButterfly() {
+                const b = document.createElement('div');
+                b.className = 'flying-butterfly';
+                b.innerText = butterflyEmojis[Math.floor(Math.random() * butterflyEmojis.length)];
+                
+                // Random start position (left or right side)
+                const startLeft = Math.random() > 0.5;
+                b.style.left = startLeft ? '-50px' : '105vw';
+                b.style.top = Math.random() * 100 + 'vh';
+                
+                // Mirror if starting from right
+                if(!startLeft) b.style.transform = 'scaleX(-1)';
+
+                // Random animation duration
+                const duration = 8 + Math.random() * 7;
+                b.style.animationDuration = duration + 's';
+                
+                particlesContainer.appendChild(b);
+
+                // Remove after animation
+                setTimeout(() => b.remove(), duration * 1000);
+            }
+
+            function createSparkle() {
+                const s = document.createElement('div');
+                s.className = 'sparkle';
+                s.style.left = Math.random() * 100 + 'vw';
+                s.style.top = Math.random() * 100 + 'vh';
+                
+                const size = Math.random() * 6 + 2;
+                s.style.width = size + 'px';
+                s.style.height = size + 'px';
+                
+                particlesContainer.appendChild(s);
+                setTimeout(() => s.remove(), 2000);
+            }
+
+            // Interactive Butterfly Cursor Effect (Sparkles on mouse move)
+            document.addEventListener('mousemove', (e) => {
+                if(overlay.style.display !== 'none' && Math.random() > 0.2) return; // Reduce while overlay is visible
+                if(Math.random() > 0.8) {
+                    const s = document.createElement('div');
+                    s.className = 'sparkle';
+                    s.style.left = e.clientX + 'px';
+                    s.style.top = e.clientY + 'px';
+                    s.style.animationDuration = '1s';
+                    particlesContainer.appendChild(s);
+                    setTimeout(() => s.remove(), 1000);
+                }
+            });
+
+            // --- 5. Countdown Timer ---
+            // Set the date we're counting down to: April 5th, 2026, 12:00 PM
+            const countDownDate = new Date("Apr 5, 2026 12:00:00").getTime();
+
+            const x = setInterval(function() {
+                const now = new Date().getTime();
+                const distance = countDownDate - now;
+
+                if (distance < 0) {
+                    clearInterval(x);
+                    document.getElementById("days").innerHTML = "00";
+                    document.getElementById("hours").innerHTML = "00";
+                    document.getElementById("minutes").innerHTML = "00";
+                    document.getElementById("seconds").innerHTML = "00";
+                    document.querySelector(".countdown-title").innerHTML = "The Magic is Happening!";
+                    return;
+                }
+
+                // Time calculations for days, hours, minutes and seconds
+                const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                // Output the result
+                document.getElementById("days").innerHTML = days < 10 ? '0' + days : days;
+                document.getElementById("hours").innerHTML = hours < 10 ? '0' + hours : hours;
+                document.getElementById("minutes").innerHTML = minutes < 10 ? '0' + minutes : minutes;
+                document.getElementById("seconds").innerHTML = seconds < 10 ? '0' + seconds : seconds;
+                
+            }, 1000);
+
+            // --- 6. Add to Google Calendar ---
+            document.getElementById('addToCalendarBtn').addEventListener('click', () => {
+                const event = {
+                    title: "Siri's 2nd Birthday Party",
+                    details: "Join us for a magical butterfly celebration!",
+                    location: "Magical Spices Fine Dining Restaurant & Banquet Hall, Old Madras Rd, Nagavarapalya, Bennigana Halli, Bengaluru, Karnataka 560093",
+                    // Dates must be in YYYYMMDDTHHmmssZ format. 
+                    // April 5, 2026 12:00 PM IST (IST is GMT+5:30)
+                    // Let's use simple local time parameters for Google Calendar which is easier for local events
+                    dates: "20260405T120000/20260405T160000", 
+                    ctz: "Asia/Kolkata"
+                };
+
+                const url = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(event.title)}&dates=${event.dates}&details=${encodeURIComponent(event.details)}&location=${encodeURIComponent(event.location)}&ctz=${event.ctz}`;
+                window.open(url, '_blank');
+            });
+
+        });
+    </script>
+</body>
+</html>
