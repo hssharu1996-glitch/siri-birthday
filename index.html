@@ -23,7 +23,7 @@
             --text-light: #8a6c81;
             --white-glass: rgba(255, 255, 255, 0.6);
             --border-glass: rgba(255, 255, 255, 0.8);
-            
+
             --vh: 100vh;
         }
 
@@ -157,16 +157,16 @@
             position: absolute;
             width: 100%;
             height: 100%;
-            background: linear-gradient(135deg, var(--rose-pink), #e83e8c);
+            background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('/image2.jpeg') center/cover no-repeat;
             border-radius: 5px 15px 15px 5px;
-            box-shadow: 
+            box-shadow:
                 inset 4px 0 10px rgba(0,0,0,0.1),
                 inset -1px 0 2px rgba(255,255,255,0.3),
                 10px 10px 30px rgba(0,0,0,0.3);
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
+            justify-content: end;
             padding: 2rem;
             transform-origin: left;
             transition: transform 1.5s cubic-bezier(0.645, 0.045, 0.355, 1);
@@ -213,17 +213,22 @@
             padding: 1rem;
             border-radius: 10px;
             background: rgba(255,255,255,0.1);
+
+            span {
+                font-size: 2rem;
+            }
         }
 
         .tap-text {
-            color: white;
-            margin-top: 2rem;
+            color: rgb(17, 11, 11);
+            margin-top: 1rem;
             font-size: 1.1rem;
             animation: pulse 2s infinite;
             font-weight: 500;
             background: rgba(0,0,0,0.2);
             padding: 5px 15px;
             border-radius: 20px;
+            background-color: #e6e6fa;
         }
 
         /* Layout */
@@ -265,7 +270,7 @@
             object-fit: cover;
             border: 4px solid white;
         }
-        
+
         .photo-decor {
             position: absolute;
             font-size: 1.5rem;
@@ -422,7 +427,7 @@
             color: white;
             box-shadow: 0 6px 20px rgba(37, 211, 102, 0.3);
         }
-        
+
         .btn-whatsapp:hover {
             transform: translateY(-2px);
             box-shadow: 0 8px 25px rgba(37, 211, 102, 0.4);
@@ -471,6 +476,10 @@
         .text-center { text-align: center; }
         .mt-2 { margin-top: 1rem; }
         .mb-2 { margin-bottom: 1rem; }
+        .names {
+            display: flex;
+            justify-content: end;
+        }
         .w-100 { width: 100%; }
 
         /* Animations */
@@ -554,18 +563,18 @@
             .btn { width: 100%; justify-content: center; font-size: 0.9rem; padding: 10px 15px; }
             .photo-frame { width: 150px; height: 150px; margin-bottom: 1.5rem; }
             .book { width: 240px; height: 340px; }
-            .book-title { font-size: 2.2rem; padding: 0.5rem; }
+            .book-title { font-size: 2.2rem; padding: 0.5rem; span {font-size: 2rem;} }
             .details-grid { grid-template-columns: 1fr; }
             .detail-item { gap: 10px; }
             .glass-card { padding: 1.5rem; }
             .subtitle { font-size: 1rem; margin-bottom: 1.5rem; }
         }
-        
+
         @media (max-width: 400px) {
             .magical-title { font-size: 2.2rem; }
             .countdown-title { font-size: 1.8rem; }
             .book { width: 200px; height: 280px; }
-            .book-title { font-size: 1.8rem; }
+            .book-title { font-size: 1.8rem; span {font-size: 1.2rem;} }
             .tap-text { font-size: 0.9rem; }
             .glass-card { padding: 1rem; margin-bottom: 1rem; }
             .detail-icon { width: 35px; height: 35px; font-size: 1rem; }
@@ -603,11 +612,11 @@
             <div class="book-pages"></div>
             <div class="book-spine"></div>
             <div class="book-cover">
-                <div class="book-title">Siri's<br>Magical<br>Birthday</div>
-                <div class="tap-text"><i class="fas fa-hand-pointer mb-2"></i><br>Tap to Open</div>
+                <div class="book-title">Siri's<br><span>Magical &nbsp; Birthday</span></div>
+                <div class="tap-text">Tap to Open</div>
             </div>
         </div>
-        
+
         <!-- Butterflies flying around closed book -->
         <div style="position:absolute; top:30%; left:30%; font-size:2rem; animation: float 3s ease-in-out infinite;">🦋</div>
         <div style="position:absolute; bottom:30%; right:30%; font-size:1.5rem; animation: float 4s ease-in-out infinite reverse;">🦋</div>
@@ -615,19 +624,19 @@
 
     <!-- Main Content -->
     <div class="container" id="main-content" style="display: none;">
-        
+
         <!-- Hero Section -->
         <div class="glass-card hero">
             <div class="decoration dec-top-left">🌸</div>
             <div class="decoration dec-bottom-right">🌸</div>
-            
+
             <div class="photo-frame">
                 <!-- Using a cute placeholder, could be replaced with actual photo -->
-                <img src="https://images.unsplash.com/photo-1519689680058-324335c77eba?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80" alt="Siri">
+                <img src="/image1.jpeg" alt="Siri">
                 <div class="photo-decor decor-1">🦋</div>
                 <div class="photo-decor decor-2">✨</div>
             </div>
-            
+
             <h1 class="magical-title">Siri's 2nd Birthday</h1>
             <p class="subtitle">Please join us for a butterfly-filled magical birthday celebration</p>
         </div>
@@ -658,7 +667,7 @@
         <!-- Event Details Section -->
         <div class="glass-card">
             <h2 class="countdown-title text-center">Celebration Details</h2>
-            
+
             <div class="details-grid">
                 <div class="detail-item">
                     <div class="detail-icon"><i class="far fa-calendar-alt"></i></div>
@@ -667,7 +676,7 @@
                         <p>Sunday, April 5th, 2026</p>
                     </div>
                 </div>
-                
+
                 <div class="detail-item">
                     <div class="detail-icon"><i class="far fa-clock"></i></div>
                     <div class="detail-text">
@@ -675,7 +684,7 @@
                         <p>12:00 PM Onwards</p>
                     </div>
                 </div>
-                
+
                 <div class="detail-item">
                     <div class="detail-icon"><i class="fas fa-map-marker-alt"></i></div>
                     <div class="detail-text">
@@ -688,7 +697,7 @@
                     <div class="detail-icon"><i class="fas fa-tshirt"></i></div>
                     <div class="detail-text">
                         <h4>Dress Code</h4>
-                        <p>Preferably Pink 🌸</p>
+                        <p>Preferably White, Pink, Lavender 🌸</p>
                     </div>
                 </div>
             </div>
@@ -726,7 +735,7 @@
         <div class="glass-card text-center">
             <h2 class="countdown-title" style="font-size: 2rem;">Follow the Celebration</h2>
             <p class="subtitle" style="margin-bottom: 1.5rem;">See updates and photos on Instagram</p>
-            
+
             <a href="https://www.instagram.com/little_champ_siri?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" target="_blank" style="display: inline-flex; align-items: center; justify-content: center; width: 70px; height: 70px; border-radius: 50%; background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%); color: white; font-size: 2.5rem; text-decoration: none; box-shadow: 0 6px 20px rgba(220, 39, 67, 0.3); transition: transform 0.3s ease, box-shadow 0.3s ease;">
                 <i class="fab fa-instagram"></i>
             </a>
@@ -734,10 +743,10 @@
 
         <!-- RSVP Section -->
         <div class="glass-card text-center">
-            <h2 class="countdown-title" style="font-size: 2.2rem;">RSVP</h2>
-            <p class="subtitle" style="color: var(--text-dark); font-weight: 500;">"Please join us for a magical birthday celebration"</p>
-            <p class="mb-2">Kindly confirm your presence to make our joy complete! ✨</p>
-            
+            <!-- <h2 class="countdown-title" style="font-size: 2.2rem;">RSVP</h2> -->
+            <p class="subtitle" style="color: var(--text-dark); font-weight: 500;">"Please join us for a Magical Birthday Celebration of our Daughter"</p>
+            <h4 class="mb-2 names">- Priyanka S M & Sriman N</h4>
+
             <div class="actions">
                 <a href="tel:9164843500" class="btn btn-primary">
                     <i class="fas fa-phone-alt"></i> Call
@@ -752,7 +761,7 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            
+
             // Elements
             const magicBook = document.getElementById('magicBook');
             const overlay = document.getElementById('storybook-overlay');
@@ -765,7 +774,7 @@
             magicBook.addEventListener('click', () => {
                 // Open the book visually
                 magicBook.classList.add('open');
-                
+
                 // Play music logic
                 bgMusic.volume = 0.5;
                 let playPromise = bgMusic.play();
@@ -792,12 +801,12 @@
                 setTimeout(() => {
                     overlay.style.opacity = '0';
                     mainContent.style.display = 'block';
-                    
+
                     // Trigger reflow to apply CSS transition
-                    void mainContent.offsetWidth; 
-                    
+                    void mainContent.offsetWidth;
+
                     mainContent.classList.add('visible');
-                    
+
                     setTimeout(() => {
                         overlay.style.display = 'none';
                         // Start continuous magical effects
@@ -856,19 +865,19 @@
                 const b = document.createElement('div');
                 b.className = 'flying-butterfly';
                 b.innerText = butterflyEmojis[Math.floor(Math.random() * butterflyEmojis.length)];
-                
+
                 // Random start position (left or right side)
                 const startLeft = Math.random() > 0.5;
                 b.style.left = startLeft ? '-50px' : '105vw';
                 b.style.top = Math.random() * 100 + 'vh';
-                
+
                 // Mirror if starting from right
                 if(!startLeft) b.style.transform = 'scaleX(-1)';
 
                 // Random animation duration
                 const duration = 8 + Math.random() * 7;
                 b.style.animationDuration = duration + 's';
-                
+
                 particlesContainer.appendChild(b);
 
                 // Remove after animation
@@ -880,11 +889,11 @@
                 s.className = 'sparkle';
                 s.style.left = Math.random() * 100 + 'vw';
                 s.style.top = Math.random() * 100 + 'vh';
-                
+
                 const size = Math.random() * 6 + 2;
                 s.style.width = size + 'px';
                 s.style.height = size + 'px';
-                
+
                 particlesContainer.appendChild(s);
                 setTimeout(() => s.remove(), 2000);
             }
@@ -932,7 +941,7 @@
                 document.getElementById("hours").innerHTML = hours < 10 ? '0' + hours : hours;
                 document.getElementById("minutes").innerHTML = minutes < 10 ? '0' + minutes : minutes;
                 document.getElementById("seconds").innerHTML = seconds < 10 ? '0' + seconds : seconds;
-                
+
             }, 1000);
 
             // --- 6. Add to Google Calendar ---
@@ -941,10 +950,10 @@
                     title: "Siri's 2nd Birthday Party",
                     details: "Join us for a magical butterfly celebration!",
                     location: "Magical Spices Fine Dining Restaurant & Banquet Hall, Old Madras Rd, Nagavarapalya, Bennigana Halli, Bengaluru, Karnataka 560093",
-                    // Dates must be in YYYYMMDDTHHmmssZ format. 
+                    // Dates must be in YYYYMMDDTHHmmssZ format.
                     // April 5, 2026 12:00 PM IST (IST is GMT+5:30)
                     // Let's use simple local time parameters for Google Calendar which is easier for local events
-                    dates: "20260405T120000/20260405T160000", 
+                    dates: "20260405T120000/20260405T160000",
                     ctz: "Asia/Kolkata"
                 };
 
